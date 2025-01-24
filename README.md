@@ -24,3 +24,5 @@ Once dowloaded, the folders of the libraries must be placed in the SAME FOLDER w
 Of course, there are different ways to compile and run the program as long as you install the required libraries. The "tuto" above matters only if you which to compile it using the makefile.
 
 ENJOY ! 
+
+PS : The game was coded by French guys so the name of some variables might look odd ^^ (thanksfully, the comments are in english for you to better understand how the game was developed).
