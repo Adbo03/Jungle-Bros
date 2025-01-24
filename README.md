@@ -21,7 +21,7 @@ For the game to compile, the following libraries must be dowloaded (best not thr
   
 Once dowloaded, the folders of the libraries must be placed in the SAME FOLDER where the others files are stored (espacially main.c) and, for each library, the .dll file (in the lib folder) must be moved to the main folder (where all the files are located, i.e. the same folder were the libraries are stored).
 
-Of course, there are different ways to compile and run the program as long as you install the required libraries. The "tuto" above matters only if you which to compile it using the makefile.
+Of course, there are different ways to compile and run the program as long as you install the required libraries. The "tuto" above matters only if you wish to compile it using the makefile.
 
 ENJOY ! 
 
