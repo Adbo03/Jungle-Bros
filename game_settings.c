@@ -4,10 +4,10 @@
 
 int init(SDL_Window** gWindow,SDL_Renderer** gRenderer, char* nameWindow){
 	
-    /* Flag d'initialisation */
+        /* Initialization flag */
 	int success = TRUE;
 
-	/* Initialisation de SDL */
+	/* SDL Initialization */
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ){
 		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
 		success = FALSE;
@@ -18,7 +18,7 @@ int init(SDL_Window** gWindow,SDL_Renderer** gRenderer, char* nameWindow){
 			printf( "Warning: Linear texture filtering not enabled!" );
 		}
 
-		/* Creation de la fenetre */
+		/* Create the window */
 		*gWindow = SDL_CreateWindow(nameWindow, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 		if( *gWindow == NULL ){
 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -32,7 +32,7 @@ int init(SDL_Window** gWindow,SDL_Renderer** gRenderer, char* nameWindow){
 				success = FALSE;
 			}
 			else{
-				/* Initialisation de la couleur de l'ecran */
+				/* Initialization of the color of the screen */
 				SDL_SetRenderDrawColor( *gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 			}
 		}
@@ -43,31 +43,31 @@ int init(SDL_Window** gWindow,SDL_Renderer** gRenderer, char* nameWindow){
 
 
 void close(SDL_Window** gWindow,SDL_Renderer** gRenderer){
-	/* Destruction de la fenetre */
+	/* Destruction of the window */
 	SDL_DestroyRenderer( *gRenderer );
 	SDL_DestroyWindow(* gWindow );
 	*gWindow = NULL;
 	*gRenderer = NULL;
 
-	/* Fermeture de SDL */
+	/* Close SDL */
 	SDL_Quit();
 }
 
-/* Gestion intéraction avec le menu du jeu */
+/* Manage the interaction with the game menu */
 void menu_control( SDL_Renderer* ecran, Brick_menu* bloc, int* quit, int* menu, Effets_sonores musique){
     SDL_Event e;
 
     while(SDL_PollEvent( &e ) && menu){
         
-        /* Si une touche est pressee */
+        /* If a key is pressed */
         if( e.type == SDL_KEYDOWN){
             
-            /* et relachee */
+            /* and let go */
             if (e.key.repeat == 0){ 
 
                 switch( e.key.keysym.sym )
                 {   
-                    /* Droite */
+                    /* Right */
                     case SDLK_RIGHT:   
                         if(!bloc->selection_exit){
                             bloc->selection_exit = TRUE; 
@@ -77,7 +77,7 @@ void menu_control( SDL_Renderer* ecran, Brick_menu* bloc, int* quit, int* menu, 
                         }                                                  
                     break;
 
-                    /* Gauche */
+                    /* Left */
                     case SDLK_LEFT:  
                         if(!bloc->selection_start){
                             bloc->selection_start = TRUE;
@@ -87,11 +87,11 @@ void menu_control( SDL_Renderer* ecran, Brick_menu* bloc, int* quit, int* menu, 
                         }                                                      
                     break;
 
-                    /* Touche Entree */
+                    /* Return key */
                     case SDLK_RETURN:
                         if(bloc->selection_exit){
                             *quit = TRUE;
-                            *menu = FALSE;              // Pour indiquer qu'on sort du menu 
+                            *menu = FALSE;              // To inidicates if we exit the menu
                         }
                         else if(bloc->selection_start){
                             *menu = FALSE;
@@ -99,7 +99,7 @@ void menu_control( SDL_Renderer* ecran, Brick_menu* bloc, int* quit, int* menu, 
                         }
                     break;
 
-                    /* Pour quitter le jeu (touche ECHAP) */
+                    /* To quit the game (Escape key) */
                     case SDLK_ESCAPE:
                         *quit=TRUE;
                     break;
@@ -110,33 +110,33 @@ void menu_control( SDL_Renderer* ecran, Brick_menu* bloc, int* quit, int* menu, 
 
 }
 
-/* Initialisation des blocs (menu) */
+/* Initialization of the bricks (menu) */
 void Init_blocs(SDL_Renderer* ecran, SDL_Rect start_rect, SDL_Rect exit_rect, Brick_menu* blocs){
     blocs->selection_start = FALSE;
     blocs->selection_exit = FALSE;
     blocs->brick_start = start_rect;
     blocs->brick_exit = exit_rect;
 
-    /* Bloc start */
+    /* Brick start */
     blocs->brick_start.y -= blocs->brick_start.h/2;
     blocs->brick_start.x -= blocs->brick_start.w/2;
     blocs->brick_start.w *= 2;
     blocs->brick_start.h *= 2;
 
-    /* Rectangle sélection bloc start */
+    /* Selection rectangle brick start */
     blocs->select_start = blocs->brick_start;
     blocs->select_start.w += 4 ;
     blocs->select_start.x -= 2;
     blocs->select_start.h += 4;
     blocs->select_start.y -= 2;
 
-    /* Bloc exit */
+    /* Brick exit */
     blocs->brick_exit.x -= blocs->brick_exit.w/2;
     blocs->brick_exit.w = blocs->brick_start.w;
     blocs->brick_exit.h = blocs->brick_start.h;
     blocs->brick_exit.y = blocs->brick_start.y;
 
-    /* Rectangle sélection bloc exit */
+    /* Selection rectangle brick exit */
     blocs->select_exit = blocs->brick_exit;
     blocs->select_exit.w += 4;
     blocs->select_exit.x -= 2;
@@ -146,7 +146,7 @@ void Init_blocs(SDL_Renderer* ecran, SDL_Rect start_rect, SDL_Rect exit_rect, Br
     blocs->texture = creerTextureImg(ecran,"Images/bloc_menu.bmp",NULL,NULL);
 }
 
-/* Initialisation images de fin de partie (win/lose) */
+/* Initialization of the endgame images (win/lose) */
 void Init_end_game(SDL_Renderer* ecran, End_game* fin_jeu){
     fin_jeu->win_texture = creerTextureImg(ecran,"Images/you_win.bmp",NULL,NULL);
     fin_jeu->lose_texture = creerTextureImg(ecran,"Images/game_over.bmp",NULL,NULL);
@@ -160,8 +160,7 @@ void Init_end_game(SDL_Renderer* ecran, End_game* fin_jeu){
     fin_jeu->win = FALSE;
 }
 
-// fonctions de dessin
-
+/* Draw a rectangle */
 void dessine_rect_plein(SDL_Renderer *gRenderer,SDL_Rect *rect,long c){
    int r = ( uint8_t )(c >> 16);
    int g = ( uint8_t )(c >>  8);
@@ -170,16 +169,18 @@ void dessine_rect_plein(SDL_Renderer *gRenderer,SDL_Rect *rect,long c){
    SDL_RenderFillRect( gRenderer,rect);
 }
 
+/* Get the current time in ms */
 double getCurrentTimeMS(){
     double clo=clock();
     return 1000.*clo/CLOCKS_PER_SEC;
 }
 
+/* Create the textures */
 SDL_Texture* creerTextureImg(SDL_Renderer *ecran,char *nom_file_bmp,int *size_w, int *size_h){
     SDL_Surface* image = SDL_LoadBMP(nom_file_bmp);
     if(!image)
     {
-      printf("Erreur de chargement de l'image : %s",SDL_GetError());
+      printf("Loading image error : %s",SDL_GetError());
       return NULL;
     }
 
@@ -188,7 +189,7 @@ SDL_Texture* creerTextureImg(SDL_Renderer *ecran,char *nom_file_bmp,int *size_w,
 
     if(NULL == monImage)
     {
-        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s", SDL_GetError());
+        fprintf(stderr, "Error SDL_CreateTextureFromSurface : %s", SDL_GetError());
         return NULL;
     }
     SDL_QueryTexture(monImage, NULL, NULL,size_w,size_h); 
@@ -197,6 +198,7 @@ SDL_Texture* creerTextureImg(SDL_Renderer *ecran,char *nom_file_bmp,int *size_w,
     return monImage;
 }
 
+/* Display the image (texture) on screen */
 void dessine_Img_redim(SDL_Renderer *ecran,SDL_Texture *imgTexture,SDL_Rect imgRect){
     SDL_Rect pos_texture; // taille originelle
     pos_texture.x=0;
@@ -205,11 +207,11 @@ void dessine_Img_redim(SDL_Renderer *ecran,SDL_Texture *imgTexture,SDL_Rect imgR
     SDL_RenderCopy(ecran, imgTexture,&pos_texture, &imgRect);
 }
 
-/* Initialisation des variables de gestion des images */
+/* Initialization of the variables for the images (background/win/lose images) */
 void Init_image(SDL_Renderer* ecran, SDL_Texture** image_Texture, SDL_Rect* img_rect, char* file_img){
     *image_Texture=creerTextureImg(ecran,file_img,&img_rect->w,&img_rect->h);
     
-    /* Affichage d'arrière plan (4 fonds pour pouvoir defiler l'image) */
+    /* Display of the background (4 images to have a smooth effect) */
     if(strcmp(file_img,"Images/fond_super_mario_1.bmp") == 0){
         img_rect->w = SCREEN_WIDTH/2;
         img_rect->h = SCREEN_HEIGHT;
@@ -238,7 +240,7 @@ void Init_image(SDL_Renderer* ecran, SDL_Texture** image_Texture, SDL_Rect* img_
         img_rect->y = 0;
     }
 
-    /* Affichage en cas de victoire */
+    /* Display if the game is won */
     else if(strcmp(file_img,"Images/you_win_bmp.bmp") == 0){
         img_rect->w=img_rect->w/2 + SCREEN_WIDTH - 640;
         img_rect->h=img_rect->h/2 + SCREEN_HEIGHT - 480;
@@ -246,7 +248,7 @@ void Init_image(SDL_Renderer* ecran, SDL_Texture** image_Texture, SDL_Rect* img_
         img_rect->y=SCREEN_HEIGHT/2 - img_rect->h/2;
     }
 
-    /* Affichage en cas de défaite */
+    /* Display if the game is lost */
     else if(strcmp(file_img,"Images/game_over_bmp.bmp") == 0){
         img_rect->w=img_rect->w/4 + SCREEN_WIDTH - 640;
         img_rect->h=img_rect->h/4 + SCREEN_HEIGHT - 480;
@@ -255,7 +257,7 @@ void Init_image(SDL_Renderer* ecran, SDL_Texture** image_Texture, SDL_Rect* img_
     }
 }
 
-/* Initialisation des variables pour la gestion du texte */
+/* Initialization of the variables for the text (game menu) */
 void Init_police(SDL_Renderer* ecran, char* message, SDL_Texture** texture, char* mode, SDL_Rect* pos_rect){
     if (*texture) {SDL_DestroyTexture(*texture);*texture=NULL;}
     SDL_Color Or = {238, 201, 0};
@@ -268,7 +270,7 @@ void Init_police(SDL_Renderer* ecran, char* message, SDL_Texture** texture, char
         surface = TTF_RenderText_Solid(font,message,Or);
         *texture = SDL_CreateTextureFromSurface(ecran,surface);
         
-        /* Position du "start" */
+        /* Position of "start" */
         pos_rect->w = SCREEN_WIDTH/9;
         pos_rect->h = SCREEN_HEIGHT/12; 
         pos_rect->x = 5*SCREEN_WIDTH/16;
@@ -280,7 +282,7 @@ void Init_police(SDL_Renderer* ecran, char* message, SDL_Texture** texture, char
         surface = TTF_RenderText_Solid(font,message,Or);
         *texture = SDL_CreateTextureFromSurface(ecran,surface);
         
-        /* Position du "exit" */
+        /* Position of "exit" */
         pos_rect->w = SCREEN_WIDTH/9;
         pos_rect->h = SCREEN_HEIGHT/12; 
         pos_rect->x = 9*SCREEN_WIDTH/16;
@@ -292,7 +294,7 @@ void Init_police(SDL_Renderer* ecran, char* message, SDL_Texture** texture, char
         surface = TTF_RenderText_Solid(font,message,Or);
         *texture = SDL_CreateTextureFromSurface(ecran,surface);
 
-        /* Position du nom du jeu */
+        /* Position of the name of the game */
         pos_rect->w = SCREEN_WIDTH/2;
         pos_rect->h = SCREEN_HEIGHT/4;
         pos_rect->x = SCREEN_WIDTH/4;
@@ -304,7 +306,7 @@ void Init_police(SDL_Renderer* ecran, char* message, SDL_Texture** texture, char
         surface = TTF_RenderText_Solid(font,message,Or_2);  
         *texture = SDL_CreateTextureFromSurface(ecran,surface);
 
-        /* Position du nom du jeu */
+        /*Position of the name of the game (twice for 3D effect) */
         pos_rect->w = SCREEN_WIDTH/2;
         pos_rect->h = SCREEN_HEIGHT/4;
         pos_rect->x = SCREEN_WIDTH/4 + 4;
@@ -315,10 +317,10 @@ void Init_police(SDL_Renderer* ecran, char* message, SDL_Texture** texture, char
     SDL_FreeSurface(surface);
 }
 
-/* Initialisation des musiques et effets sonores */
+/*Initialization of the music and sound effects */
 void Init_musique(Effets_sonores* musique){
 
-    /* Chargement des musiques et effets sonores */
+    /* Loading of the musics and sound effects */
     musique->select = Mix_LoadWAV("Musique/select_sound.mp3");
     musique->menu = Mix_LoadWAV("Musique/Menu.mp3");
     musique->jeu = Mix_LoadWAV("Musique/JEU.mp3");
@@ -331,7 +333,7 @@ void Init_musique(Effets_sonores* musique){
     musique->Here_we_go = Mix_LoadWAV("Musique/here_we_go.mp3");
 }
 
-/* Libère les alllocations liées aux musiques et effets sonores */
+/* Free the memory allocated for the musics and sound effects*/
 void free_audio(Effets_sonores* Musique){
     if(Musique){
         if (Musique->select) {Mix_FreeChunk(Musique->select); Musique->select = NULL;}
@@ -347,16 +349,17 @@ void free_audio(Effets_sonores* Musique){
     }
 }
 
-/* Initialisation de la caverne de fin */
+/* Initialization of the cave (end scene) */
 void Init_cave(SDL_Renderer* ecran, Caverne* cave){
+    /* The cave is cut in half to allow the character to enter it (effect) */
     cave->texture_partie_droite = creerTextureImg(ecran,"Images/caverne_droite.bmp",&cave->rect_d.w,&cave->rect_d.h);
     cave->texture_partie_gauche = creerTextureImg(ecran,"Images/caverne_gauche.bmp",&cave->rect_g.w,&cave->rect_g.h);
 
-    /* Position partie gauche */
+    /* Position of the left part */
     cave->rect_g.x = SCREEN_WIDTH;
     cave->rect_g.y = SCREEN_HEIGHT - cave->rect_g.h + 3;
 
-    /* Position partie droite */
+    /* Position of the right part */
     cave->rect_d.x = cave->rect_g.x + cave->rect_g.w - 100; 
     cave->rect_d.y = SCREEN_HEIGHT - cave->rect_d.h + 3;
 
@@ -366,7 +369,7 @@ void Init_cave(SDL_Renderer* ecran, Caverne* cave){
     cave->on_screen = FALSE;
 }
 
-/* Gestion du deplacement du fond */
+/* Manage the movement of the background */
 void Deplacement_fond(Arriere_plan* decor, int vitesse){
 
     decor->fond_1.x -= vitesse;
@@ -389,7 +392,7 @@ void Deplacement_fond(Arriere_plan* decor, int vitesse){
 
 }
 
-/* Affichage de l'arriere plan */
+/* Display the background */
 void dessine_fond(SDL_Renderer* ecran, Arriere_plan decor){
     dessine_Img_redim(ecran,decor.texture_1,decor.fond_1);
     dessine_Img_redim(ecran,decor.texture_2,decor.fond_2);
@@ -397,7 +400,7 @@ void dessine_fond(SDL_Renderer* ecran, Arriere_plan decor){
     dessine_Img_redim(ecran,decor.texture_4,decor.fond_4);
 }
 
-/* Detruit les textures */
+/* Destroy the textures */
 void free_decor(Arriere_plan* decor){
     if(decor){
         if(decor->texture_1){SDL_DestroyTexture(decor->texture_1); decor->texture_1 = NULL;}
