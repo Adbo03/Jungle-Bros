@@ -15,7 +15,7 @@ void Init_obstacle(SDL_Renderer* ecran, Obstacle* obs){
     }
 }
 
-/* Dessine l'obstacle sur l'ecran */
+/* Display the obstacle on screen */
 void dessine_obstacle(SDL_Renderer* ecran, Obstacle obs){
 
     obs.rect.x = obs.x - obs.rect.w/2;
