@@ -22,21 +22,21 @@
 
 typedef struct Personnage{
     SDL_Rect rect;
-    int x;                              /* position en x du personnage */
-    int y;                              /* position en y du personnage */
-    int previous_x;                     /* mémorise le x précédent (affichage image arret) */
-    int previous_y;                     /* mémorise le y avant un saut (depuis le sol)*/
-    int up;                             /* indique si le personnage saute */
-    int down;                           /* indique si le personnage retombe sur le sol */
-    char dir;                           /* indique le sens de déplacement pour le saut : 'd' (droite); ' ' (sur place); 'g' (gauche)*/ 
-    char previous_dir;                  /* Pour gerer l'affichage de l'arret (droit/gauche) */
-    int exit_menu;                      /* sortie du menu (appui start) */
-    int target_y;                       /* Hauteur à atteindre lors d'un saut */
+    int x;                              /* X position of the character */
+    int y;                              /* Y position of the character */
+    int previous_x;                     /* Memorisation of the last X position (for the display of "standing still" image) */
+    int previous_y;                     /* Memorisation of the Y position before a jump (from the ground)*/
+    int up;                             /* Indicates if the character is jumping */
+    int down;                           /* Indicates if the character is falling (after a jump) */
+    char dir;                           /* Indicates the orientation for the jump : 'd' (right); ' ' (up and down); 'g' (left)*/ 
+    char previous_dir;                  /* To manage the "standing still" image (right/left) */
+    int exit_menu;                      /* Indicates if the character is exiting the menu (start button) */
+    int target_y;                       /* Height to reach during a jump */
     int alternance;
     int tps_up;
-    int obs;                            /* Actif si le personnage est sur un obstacle */
-    int exit_game;                      /* sortie du jeu (partie gagnee) */
-    int isAlive;                        /* FALSE si le personnage est mort (partie perdue) */
+    int obs;                            /* TRUE if the character is on an obstacle */
+    int exit_game;                      /* exit game (victory) */
+    int isAlive;                        /* FALSE if the character is dead (game lost) */
     
     /* visuel */
     SDL_Texture* texture_d[2];
@@ -47,16 +47,16 @@ typedef struct Personnage{
     
 } Personnage;
 
-/* Gère l'interaction du joueur avec le clavier */
+/* Manage the interaction between the player and the keyboard */
 void control_keybord( SDL_Renderer* ecran, int* quit, Personnage* mario, End_game* fin_jeu, Effets_sonores musique, Obstacle* bloc, Caverne* cave, Arriere_plan* decor,Ennemi* ennemis[MAX_ENNEMIS]);
 
-/* Initialise le personnage principal */
+/* Initialize the main character */
 void Init_personnage(SDL_Renderer* ecran, Personnage* mario);
 
-/* Dessine le personnage sur l'ecran */
+/* Display the character on screen */
 void dessine_personnage(SDL_Renderer* ecran, Personnage* mario);
 
-/* Desalloue les textures du personnage */
+/* Free the textures */
 void free_mario(Personnage* mario);
 
 #endif // _MARIO_H
