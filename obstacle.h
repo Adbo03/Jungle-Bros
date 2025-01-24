@@ -9,16 +9,16 @@
 #endif //_SETTINGS_H
 
 typedef struct _Obstacle{
-    SDL_Rect rect;         // Position (coin superieur gauche)
+    SDL_Rect rect;         // Position (upper left corner)
     SDL_Texture* texture;  // image
-    int x, y;              // position (au centre)
+    int x, y;              // position (center)
     int onScreen;
 } Obstacle;
 
-/* Initialisation obstacle */
+/* Initialization of the obstacle */
 void Init_obstacle(SDL_Renderer* ecran, Obstacle* obs);
 
-/* Dessine l'obstacle sur l'ecran */
+/* Display the obstacle on screen */
 void dessine_obstacle(SDL_Renderer* ecran, Obstacle obs);
 
 #endif // _OBSTACLE 
