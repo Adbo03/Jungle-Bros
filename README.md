@@ -5,7 +5,7 @@ This game uses the same ingredients as Super Mario : a main character who must t
 
 We coded this game using the SDL2 library for the display, the SDL2_Mixer library for the sound effects and finally the SDL2_TTF library. To organise our project, we decided to separate the different aspects of the game into files :
 - main.c which I'm sure you would have guessed stores the main function and allows to run the program.
-- game_settings.c (with it's header file game_settings.h) which handles all functions related to the game itself (opening of the window, managing the game menu, initialisation of the musics,...)
+- game_settings.c (with it's header file game_settings.h) which handles all functions related to the game itself (creation of the window, managing the game menu, initialization of the musics,...)
 - obstacle.c (with it's header file obstacle.h) which manage all different aspects related to the obstacles (movement, initialization, display,...)
 - mario.c (with it's header file mario.h) which handles all different aspects related to Junko (movement, display, initialization, ...)
 - ennemis.c (with it's header file ennemis.c) which handles all different aspects related to the ennemies (movement, display, initialization,...)
