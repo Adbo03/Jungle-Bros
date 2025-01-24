@@ -1,11 +1,11 @@
 #include "ennemis.h"   
 #include "stdio.h"    
 
-/* Initialization of an ennemy */
+/* Initialization of an enemy */
 Ennemi* initEnnemi(SDL_Renderer* ecran, int type) {
     Ennemi *ennemi = (Ennemi*) malloc(sizeof(Ennemi));
 
-    /* Loading of the textures and initialization of the variables to manage the ennemy */
+    /* Loading of the textures and initialization of the variables to manage the enemy */
     if (type == TYPE_OISEAU){ 
         ennemi->textureCount = 4; 
         ennemi->textures = malloc(ennemi->textureCount * sizeof(SDL_Texture*));
@@ -54,27 +54,27 @@ void dessine_Ennemis(Ennemi* ennemi, SDL_Renderer* ecran) {
     ennemi->rect.x = ennemi->x - ennemi->rect.w / 2;
     ennemi->rect.y = ennemi->y - ennemi->rect.h / 2;
 
-    /* Display of the ennemy on screen */
+    /* Display of the enemy on screen */
     SDL_RenderCopy(ecran, ennemi->textures[ennemi->currentFrame], NULL, &(ennemi->rect));
 }
 
-/* Update the position and the state (alive/dead) of the ennemies */
+/* Update the position and the state (alive/dead) of the enemies */
 void updateEnnemi(Ennemi* ennemi[MAX_ENNEMIS], double elapsed, Effets_sonores* musique, Caverne cave, Obstacle obs) {
 
-    /* Update the positions of ALL ennemies */
+    /* Update the positions of ALL enemies */
     for(int n = 0; n < MAX_ENNEMIS; n++){
         double moveDistance = ennemi[n]->speed * (elapsed / 1000.0); // Calculation of the speed of movement
         
         if (ennemi[n]->isAlive) {
             
-            /* Update the position of the eagle */
+            /* Update the position of the bird */
             if (ennemi[n]->type == TYPE_OISEAU) {
                 if (ennemi[n]->y < COORD_SOL) {
                     if(!Mix_Playing(2)) Mix_PlayChannel(2, musique->oiseau, 0);
                     ennemi[n]->y += moveDistance ;   
                     ennemi[n]->x -= moveDistance;
                     
-                    /* If the eagle goes through an obstacle */
+                    /* If the bird flies through an obstacle */
                     ennemi[n]->rect.x = ennemi[n]->x - ennemi[n]->rect.w/2;
                     ennemi[n]->rect.y = ennemi[n]->y - ennemi[n]->rect.h/2;
                     obs.rect.x = obs.x - obs.rect.w/2;
@@ -86,7 +86,7 @@ void updateEnnemi(Ennemi* ennemi[MAX_ENNEMIS], double elapsed, Effets_sonores* m
                 } 
                 else {
                     ennemi[n]->x -= moveDistance;
-                    ennemi[n]->speed += 3.0;         // The eagle speeds up
+                    ennemi[n]->speed += 3.0;         // The bird speeds up
                 }
             }
 
@@ -103,7 +103,7 @@ void updateEnnemi(Ennemi* ennemi[MAX_ENNEMIS], double elapsed, Effets_sonores* m
                         ennemi[n]->isJumping = 0;
                         ennemi[n]->jumpTimer = 0;
                     } else {
-                        // Position pendant le saut
+                        // Position during the jump
                         ennemi[n]->y = SCREEN_HEIGHT - (ennemi[n]->rect.h/2 + 15) - ennemi[n]->jumpHeight * sin(progress * PI); // Vertical movement
                     }
                     
@@ -117,8 +117,7 @@ void updateEnnemi(Ennemi* ennemi[MAX_ENNEMIS], double elapsed, Effets_sonores* m
                     }
                 } 
                 else if (ennemi[n]->jumpTimer >= 3.0) {
-
-                    /* Unleashing of a new jump */
+                    /* Unleashing a new jump */
                     ennemi[n]->isJumping = 1;
                     ennemi[n]->jumpTimer = 0;
                     ennemi[n]->jumpStartX = ennemi[n]->x;
@@ -127,7 +126,7 @@ void updateEnnemi(Ennemi* ennemi[MAX_ENNEMIS], double elapsed, Effets_sonores* m
             }
         } 
         
-        /* Check if the ennemy is still on screen */
+        /* Check if the enemy is still on screen */
         if ((ennemi[n]->x + ennemi[n]->rect.w / 2) < 0) {
             ennemi[n]->x = (SCREEN_WIDTH) + (ennemi[n]->rect.w/2);
             if(ennemi[n]->type == TYPE_OISEAU) ennemi[n]->y = SCREEN_HEIGHT/2 - ennemi[n]->rect.h/2; 
@@ -138,7 +137,7 @@ void updateEnnemi(Ennemi* ennemi[MAX_ENNEMIS], double elapsed, Effets_sonores* m
         if(!check_Alive(ennemi) && !cave.move && !cave.on_screen && (!ennemi[n]->isAlive)){
             int luck = rand()%100;
 
-            /* Random appearances of the ennemy */
+            /* Random appearances of the enemy */
             if(((ennemi[n]->type == TYPE_OISEAU) && ( luck <= 1)) || ((ennemi[n]->type == TYPE_ARRAIGNE) && ( luck <= 3))){
                 ennemi[n]->isAlive=TRUE;
                 ennemi[n]->speed_start += 25;
@@ -148,7 +147,7 @@ void updateEnnemi(Ennemi* ennemi[MAX_ENNEMIS], double elapsed, Effets_sonores* m
     }
 }
 
-/* Check if the ennemy is still on screen */
+/* Check if the enemy is still on screen */
 int check_Alive(Ennemi* ennemis[MAX_ENNEMIS]){
     for(int n = 0; n < MAX_ENNEMIS; n++){
         if(ennemis[n]->isAlive)  return TRUE;
@@ -165,7 +164,7 @@ void updateAnimation(Ennemi* ennemi) {
         // If the time is up, update the frame
         if (ennemi->animationCounter >= ennemi->animationDelay) {
             ennemi->currentFrame = (ennemi->currentFrame + 1) % ennemi->textureCount;
-            ennemi->animationCounter = 0;  // Réinitialise le compteur
+            ennemi->animationCounter = 0;  // Reset the counter
         }
     }
 }
